@@ -1,0 +1,38 @@
+#%RAML 1.0
+title: git-first-project.raml
+
+
+description: This API is exposed to API consumers and is used to communicate with downstream APIs. 
+version: v1
+protocols:
+  - https
+  - http
+
+uses:
+  commonResources: /exchange_modules/bcd8ca3b-c9af-40e6-9219-2bf04398029d/common-raml-fragments/1.0.0/common-raml-fragments.raml
+types:
+  contact-data-request: !include /dataType/post-contact-data-request.raml
+
+securedBy:
+  - commonResources.clientEnforcement # Apply globally
+
+/contact-data:
+  is: 
+    - commonResources.common-error-responses # Correct reference to the trait
+  post:
+    displayName: contact-data
+    description: Retruns contacts based on filters given
+    body:
+      application/json:
+        type: contact-data-request
+        examples:
+          input: !include /example/request/post-contact-data-request.json
+    
+    responses:
+      "200":
+        description: Attendace data has been successfully updated
+        body:
+          application/json:
+            type: object
+            examples:
+              input: !include /example/response/post-contact-data-response.json
